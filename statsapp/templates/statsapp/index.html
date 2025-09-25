@@ -1,0 +1,81 @@
+{% extends 'statsapp/base.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-gear-fill"></i>
+        Distribution & Parameters
+      </div>
+      <div class="card-body">
+        <form id="prob-form">
+          <div class="mb-3">
+            <label for="distribution" class="form-label">Distribution</label>
+            <select id="distribution" class="form-select">
+              <option value="binomial">Binomial</option>
+              <option value="negbin">Negative Binomial</option>
+              <option value="geometric">Geometric</option>
+              <option value="poisson">Poisson</option>
+            </select>
+          </div>
+
+          <div id="params-area">
+            </div>
+
+          <div class="mb-4">
+            <label class="form-label">Success Condition</label>
+            <div class="input-group">
+              <select id="comparator" class="form-select" style="max-width: 120px;">
+                <option value="exact">P(X = k)</option>
+                <option value="<=">P(X ≤ k)</option>
+                <option value=">=">P(X ≥ k)</option>
+              </select>
+              <input id="target" class="form-control" type="number" value="0" placeholder="k">
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button class="btn btn-primary" type="submit" id="compute-btn">
+              <i class="bi bi-calculator-fill"></i> Compute
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card">
+       <div class="card-header">
+        <i class="bi bi-bar-chart-fill"></i>
+        Result
+      </div>
+      <div class="card-body">
+        <div id="result-area">
+          <div id="result-placeholder">
+            <i class="bi bi-graph-up"></i>
+            <p>Your results and chart will appear here.</p>
+          </div>
+          <div id="result-display" class="d-none">
+            <div class="stats-grid">
+              <div>
+                <small>Mean</small>
+                <strong id="result-mean"></strong>
+              </div>
+              <div>
+                <small>Variance</small>
+                <strong id="result-variance"></strong>
+              </div>
+            </div>
+            <div class="probability-result">
+              <p id="result-prob-text"></p>
+              <div class="prob-value" id="result-prob-value"></div>
+            </div>
+          </div>
+        </div>
+        <canvas id="pmfChart" width="400" height="200" class="mt-4"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

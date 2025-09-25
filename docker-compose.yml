@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    command: ["/bin/bash", "/usr/src/app/entrypoint.sh"]
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    tty: true

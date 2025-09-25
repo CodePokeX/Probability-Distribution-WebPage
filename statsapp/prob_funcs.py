@@ -12,12 +12,13 @@ def binomial_pmf(n:int, p:float, k:int) -> float:
         return 0.0
     return nCr(n, k) * (p**k) * ((1-p)**(n-k))
 
-# Negative Binomial (failures before r-th success)
-# P(F = k) = C(k + r -1, r-1) * p^r * (1-p)^k  for k = 0,1,...
-def negbin_pmf(r:int, p:float, k:int) -> float:
-    if k < 0:
+# Negative Binomial (total trials to r-th success)
+# P(X=k) = C(k-1, r-1) * p^r * (1-p)^(k-r)  for k = r, r+1,...
+def negbin_pmf_total_trials(r:int, p:float, k:int) -> float:
+    if k < r:
         return 0.0
-    return nCr(k + r - 1, r - 1) * (p**r) * ((1-p)**k)
+    failures = k - r
+    return nCr(k - 1, r - 1) * (p**r) * ((1-p)**failures)
 
 # Geometric: number of trials until first success (k >= 1)
 # P(X=k) = (1-p)^(k-1) p
@@ -42,12 +43,12 @@ def support_and_pmf(dist:str, params:dict, x_min:int=None, x_max:int=None) -> Tu
     if dist == 'negbin':
         r = int(params['r'])
         p = float(params['p'])
-        mean = r*(1-p)/p
+        mean = r/p
         var = r*(1-p)/(p**2)
         std = math.sqrt(var)
-        cap = int(max(10, math.ceil(mean + 6*std)))
-        xs = list(range(0, cap+1))  # failures count
-        ps = [negbin_pmf(r,p,k) for k in xs]
+        cap = int(max(r+10, math.ceil(mean + 6*std)))  # start from k = r
+        xs = list(range(r, cap+1))  
+        ps = [negbin_pmf_total_trials(r,p,k) for k in xs]
         return xs, ps
     if dist == 'geometric':
         p = float(params['p'])
@@ -79,7 +80,7 @@ def stats_for(dist:str, params:dict) -> Tuple[float, float]:
     if dist == 'negbin':
         r = int(params['r'])
         p = float(params['p'])
-        mean = r*(1-p)/p
+        mean = r/p           # mean of total trials
         var = r*(1-p)/(p**2)
         return mean, var
     if dist == 'geometric':

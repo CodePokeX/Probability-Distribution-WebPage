@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <label for="param-p" class="form-label">Probability p (0-1)</label>
         <input id="param-p" class="form-control" type="number" step="0.01" min="0" max="1" value="0.5">
       </div>
-      <div class="form-text mb-3">We count <em>failures</em> before r-th success (k = 0,1,...).</div>`;
+      <div class="form-text mb-3">We count <em>total trials</em> where we have r success (k = r,r+1,...).</div>`;
     } else if (dist === 'geometric') {
       html = `<div class="mb-3">
         <label for="param-p" class="form-label">Probability p (0-1)</label>
